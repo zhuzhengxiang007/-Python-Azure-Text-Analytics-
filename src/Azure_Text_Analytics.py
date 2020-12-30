@@ -10,8 +10,8 @@ from azure.ai.textanalytics import TextAnalyticsClient, \
 
 _LOGGER = logging.getLogger(__name__)
 #初始化配置访问Azure Text Analytics API ENDPOINT AND KEY
-os.environ.setdefault('AZURE_TEXT_ANALYTICS_ENDPOINT', "https://text-analytics-domain.cognitiveservices.azure.com/")
-os.environ.setdefault('AZURE_TEXT_ANALYTICS_KEY', "07620fd0df21463aa28bb8b0757ceb46")
+os.environ.setdefault('AZURE_TEXT_ANALYTICS_ENDPOINT', "")
+os.environ.setdefault('AZURE_TEXT_ANALYTICS_KEY', "")
 
 class Azure_Text_Analytics(object):
 
@@ -39,6 +39,7 @@ class Azure_Text_Analytics(object):
     def extract_key_phrases(self,documents):
         print('从文档中提取关键短语\n')
         result = self.text_analytics_client.extract_key_phrases(documents)
+        print(result)
         review_to_language = {}
         for idx, doc in enumerate(result):
             if not doc.is_error:
@@ -248,3 +249,52 @@ class Azure_Text_Analytics(object):
                     organization_to_reviews[entity.text].append(documents[idx])
 
         return organization_to_reviews
+    
+    def recognize_linked_entities(self,documents):
+        print('识别文档中的链接实体\n')
+        result = self.text_analytics_client.recognize_linked_entities(documents)
+        docs = [doc for doc in result if not doc.is_error]
+        entity_to_url = {}
+        for doc in docs:
+            for entity in doc.entities:
+                print("Entity '{}' has been mentioned '{}' time(s)".format(
+                    entity.name, len(entity.matches)
+                ))
+                if entity.data_source == "Wikipedia":
+                    entity_to_url[entity.name] = entity.url
+        # [END recognize_linked_entities]
+
+        print("\nNow let's see all of the Wikipedia articles we've extracted from our research documents")
+        for entity, url in entity_to_url.items():
+            print("Link to Wikipedia article for '{}': {}".format(
+                    entity, url
+            ))
+        return entity_to_url
+
+    def recognize_pii_entities(self,documents):
+        print('识别文档中的个人身份信息\n')
+        result = self.text_analytics_client.recognize_pii_entities(documents)
+        docs = [doc for doc in result if not doc.is_error]
+        for idx, doc in enumerate(docs):
+            print("Document text: {}".format(documents[idx]))
+            print("Redacted document text: {}".format(doc.redacted_text))
+            for entity in doc.entities:
+                print("...Entity '{}' with category '{}' got redacted".format(
+                    entity.text, entity.category
+                ))
+
+        # [END recognize_pii_entities]
+        print("All of the information that I expect to be redacted is!")
+
+        print(
+            "Now I want to explicitly extract SSN information to add to my user SSN database. "
+            "I also want to be fairly confident that what I'm storing is an SSN, so let's also "
+            "ensure that we're > 60% positive the entity is a SSN"
+        )
+        ssns = []
+        for doc in docs:
+            for entity in doc.entities:
+                if entity.category == 'U.S. Social Security Number (SSN)' and entity.confidence_score >= 0.6:
+                    ssns.append(entity.text)
+
+        return ssns

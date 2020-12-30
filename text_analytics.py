@@ -2,12 +2,11 @@ from src.Azure_Text_Analytics import Azure_Text_Analytics
 
 documents = [
             """
-            The concierge Paulette was extremely helpful. Sadly when we arrived the elevator was broken, but with Paulette's help we barely noticed this inconvenience.
-            She arranged for our baggage to be brought up to our room with no extra charge and gave us a free meal to refurbish all of the calories we lost from
-            walking up the stairs :). Can't say enough good things about my experience!
-            """,
-            """
-            北京文礼经典学校以“开发人性，传承智慧”为办学主旨，把握人性内容的全幅性，顺应人性发展的全程性，围绕传承智慧的教育目的，展开全人格教育实践，注重培养孩子志道、乐学、博文、约礼的人文精神及严谨、耐烦、开朗、友爱的处世之风。
+            Take "children's Classics Reading" as the educational idea
+Grasp the core of education from the source
+"Reading" is the method, "classics" is the content. The classics are pre-existing, dominant and eternal. In the most appropriate time, children should read the most appropriate method to teach the most appropriate teaching materials, from the source to grasp the core of education, namely, the three principles of education.
+Children are willing to recite and repeat
+Children's mental characteristics are good at intuition and memory, but not good at speculation and understanding. Therefore, before the age of 13, let children recite more profound cultural materials for a long time. When they grow up, gradually enrich their life experience, and naturally mature their understanding, they can learn by analogy.
             """
         ]
 sample = Azure_Text_Analytics()
