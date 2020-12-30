@@ -22,4 +22,4 @@ sample_analyze.py和sample_analyze_async.py	在单个请求中将多个分析一
 Install the Azure Text Analytics client library for Python with pip:
 pip install azure-ai-textanalytics --pre
 For more information about how the versioning story of the SDK corresponds to the versioning story of the service's API, see here.
-pip install azure-identity
+pip install azure-identity# -Python-Azure-Text-Analytics-
